@@ -7,3 +7,11 @@ updates:
     directory: '/'
     schedule:
       interval: 'monthly'
+    groups:
+      # React DOM refuses to run with a different React version, so they must move together.
+      react:
+        patterns:
+          - 'react'
+          - 'react-dom'
+          - '@types/react'
+          - '@types/react-dom'

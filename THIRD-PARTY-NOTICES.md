@@ -6,14 +6,14 @@ Tools that only build or test the extension, like webpack, TypeScript, Prettier 
 
 | Package                                                   | Version | License | Copyright                                  | Source                                                  |
 | --------------------------------------------------------- | ------- | ------- | ------------------------------------------ | ------------------------------------------------------- |
-| [react](#react)                                           | 19.3.0  | MIT     | Meta Platforms, Inc. and affiliates        | https://github.com/react/react (`packages/react`)       |
-| [react-dom](#react-dom)                                   | 19.3.0  | MIT     | Meta Platforms, Inc. and affiliates        | https://github.com/react/react (`packages/react-dom`)   |
+| [react](#react)                                           | 19.3.1  | MIT     | Meta Platforms, Inc. and affiliates        | https://github.com/react/react (`packages/react`)       |
+| [react-dom](#react-dom)                                   | 19.3.1  | MIT     | Meta Platforms, Inc. and affiliates        | https://github.com/react/react (`packages/react-dom`)   |
 | [scheduler](#scheduler)                                   | 0.28.0  | MIT     | Meta Platforms, Inc. and affiliates        | https://github.com/react/react (`packages/scheduler`)   |
 | [azure-devops-extension-sdk](#azure-devops-extension-sdk) | 5.0.0   | MIT     | Microsoft Corporation. All rights reserved | https://github.com/Microsoft/azure-devops-extension-sdk |
 
 ## react
 
-Version 19.3.0, MIT License. Source: https://github.com/react/react (`packages/react`).
+Version 19.3.1, MIT License. Source: https://github.com/react/react (`packages/react`).
 
 Copyright (c) Meta Platforms, Inc. and affiliates.
 
@@ -43,7 +43,7 @@ SOFTWARE.
 
 ## react-dom
 
-Version 19.3.0, MIT License. Source: https://github.com/react/react (`packages/react-dom`).
+Version 19.3.1, MIT License. Source: https://github.com/react/react (`packages/react-dom`).
 
 Copyright (c) Meta Platforms, Inc. and affiliates.
 
