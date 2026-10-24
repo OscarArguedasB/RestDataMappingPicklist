@@ -1,0 +1,30 @@
+name: CI
+
+# Type-checks, lints, tests and packages the extension for every change to main and every pull
+# request into it, with the Node.js version in .nvmrc.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Type-check, lint and test
+        run: npm run verify
+      - name: Build and package the extension
+        run: npm run build

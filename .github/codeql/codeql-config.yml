@@ -1,0 +1,5 @@
+name: REST Picklist code scanning
+
+# Only the extension's own source. dist/ is build output and node_modules/ is third-party code.
+paths:
+  - src

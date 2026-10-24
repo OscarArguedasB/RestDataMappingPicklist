@@ -1,0 +1,146 @@
+/*
+ * Design tokens. Every color maps to a variable the Azure DevOps SDK injects for the user's
+ * theme (light, dark, high contrast), with the light-theme value as the fallback.
+ */
+:root {
+  --rp-font-family:
+    'Segoe UI VSS (Regular)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto,
+    'Helvetica Neue', Helvetica, Ubuntu, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol';
+  --rp-font-mono: 'Cascadia Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+
+  --rp-text: var(--text-primary-color, rgba(0, 0, 0, 0.9));
+  --rp-text-secondary: var(--text-secondary-color, rgba(0, 0, 0, 0.55));
+  --rp-text-disabled: var(--text-disabled-color, rgba(0, 0, 0, 0.38));
+  --rp-surface: var(--background-color, rgb(255, 255, 255));
+  --rp-surface-raised: var(--callout-background-color, rgb(255, 255, 255));
+  --rp-accent: var(--communication-background, rgb(0, 120, 212));
+  --rp-accent-text: var(--communication-foreground, rgb(0, 90, 158));
+  --rp-on-accent: var(--text-on-communication-background, rgb(255, 255, 255));
+  --rp-focus: var(--focus-border-color, rgb(0, 120, 212));
+  --rp-danger: var(--status-error-text, rgb(218, 10, 0));
+  --rp-danger-icon: var(--status-error-foreground, rgb(205, 74, 69));
+  --rp-warning: var(--status-warning-text, rgb(184, 94, 6));
+  --rp-success: var(--status-success-foreground, rgb(16, 124, 16));
+  /* Success icons: Azure DevOps' dark-theme success green is 2.6:1 on a card, below the 3:1 an
+     icon that means something needs. Mixed toward the text color, it's darker in light and
+     lighter in dark (about 5.6:1 on the dark card). */
+  --rp-success-icon: color-mix(in srgb, var(--rp-success) 60%, var(--rp-text));
+
+  /* Derived from the text color so they adapt to every theme. 50% keeps borders above 3:1. */
+  --rp-border: color-mix(in srgb, var(--rp-text) 50%, transparent);
+  --rp-border-strong: color-mix(in srgb, var(--rp-text) 78%, transparent);
+  --rp-separator: color-mix(in srgb, var(--rp-text) 12%, transparent);
+  --rp-fill-subtle: color-mix(in srgb, var(--rp-text) 3%, transparent);
+  --rp-fill-hover: color-mix(in srgb, var(--rp-text) 6%, transparent);
+  --rp-fill-pressed: color-mix(in srgb, var(--rp-text) 11%, transparent);
+  --rp-fill-active: color-mix(in srgb, var(--rp-accent) 14%, transparent);
+  --rp-accent-wash: color-mix(in srgb, var(--rp-accent) 7%, transparent);
+  --rp-danger-wash: color-mix(in srgb, var(--rp-danger) 8%, transparent);
+  --rp-warning-wash: color-mix(in srgb, var(--rp-warning) 10%, transparent);
+  --rp-success-wash: color-mix(in srgb, var(--rp-success) 10%, transparent);
+  /* Fades out within ~14px so the iframe edge never clips it (see .rp-combobox[data-open]). */
+  --rp-shadow:
+    0 6px 16px -8px var(--callout-shadow-color, rgba(0, 0, 0, 0.132)),
+    0 1px 4px var(--callout-shadow-secondary-color, rgba(0, 0, 0, 0.108));
+
+  --rp-radius: 4px;
+  --rp-radius-large: 8px;
+  --rp-font-size: 14px;
+  --rp-font-size-small: 12px;
+  /* The second line of a list item. */
+  --rp-font-size-detail: 12px;
+  --rp-field-height: 32px;
+  --rp-hit: 24px;
+  /* Selected values in a multiple-value field. */
+  --rp-chip-height: 24px;
+  --rp-chip-font-size: 13px;
+  --rp-ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Touch screens: 44 px targets and 16 px text (which also stops iOS from zooming on focus). */
+@media (pointer: coarse) {
+  :root {
+    --rp-font-size: 16px;
+    --rp-font-size-detail: 14px;
+    --rp-field-height: 44px;
+    --rp-hit: 36px;
+    --rp-chip-height: 32px;
+    --rp-chip-font-size: 15px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  /* Transparent so the control blends into the work item form in every theme. */
+  background: transparent;
+}
+
+body {
+  color: var(--rp-text);
+  font-family: var(--rp-font-family);
+  font-size: var(--rp-font-size);
+  line-height: 1.43;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+.rp-icon {
+  display: block;
+  flex: none;
+}
+
+.rp-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.rp-spinner {
+  display: inline-block;
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--rp-separator);
+  border-top-color: var(--rp-accent);
+  border-radius: 50%;
+  animation: rp-spin 0.7s linear infinite;
+}
+
+.rp-spinner--medium {
+  width: 20px;
+  height: 20px;
+}
+
+@keyframes rp-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rp-spinner {
+    animation-duration: 1.6s;
+  }
+}
+
+@media (forced-colors: active) {
+  .rp-spinner {
+    border-color: GrayText;
+    border-top-color: Highlight;
+  }
+}

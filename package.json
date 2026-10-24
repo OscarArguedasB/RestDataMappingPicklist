@@ -1,0 +1,71 @@
+{
+  "name": "rest-data-mapping-picklist",
+  "version": "4.0.0",
+  "private": true,
+  "description": "Azure DevOps work item control that picks values from any REST API, with API configurations managed per process in Organization settings.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OscarArguedasB/RestDataMappingPicklist"
+  },
+  "engines": {
+    "node": ">=24.15.0"
+  },
+  "scripts": {
+    "clean": "node scripts/clean.mjs",
+    "prebuild": "npm run typecheck",
+    "build": "webpack --mode=production",
+    "postbuild": "npm run package",
+    "build-dev": "webpack --mode=development",
+    "watch": "webpack --mode=development --watch",
+    "serve-dev": "webpack serve --mode=development",
+    "playground": "webpack serve --mode=development --env playground",
+    "package": "tfx extension create --manifest-globs azure-devops-extension.json",
+    "package-dev": "tfx extension create --manifest-globs azure-devops-extension.json --overrides-file azure-devops-extension-dev.json",
+    "gallery-publish": "tfx extension publish --manifest-globs azure-devops-extension.json",
+    "gallery-publish-dev": "tfx extension publish --manifest-globs azure-devops-extension.json --overrides-file azure-devops-extension-dev.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint --type-aware",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "verify": "npm run typecheck && npm run lint && npm test"
+  },
+  "keywords": [
+    "azure-devops",
+    "work-item-control",
+    "picklist",
+    "rest"
+  ],
+  "author": "Oscar Arguedas Barboza",
+  "license": "SEE LICENSE IN LICENSE",
+  "dependencies": {
+    "azure-devops-extension-sdk": "^5.0.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "css-loader": "^7.1.5",
+    "esbuild-loader": "^4.5.0",
+    "html-webpack-plugin": "^5.6.8",
+    "jsdom": "^30.1.1",
+    "mini-css-extract-plugin": "^2.10.2",
+    "oxlint": "^1.86.0",
+    "oxlint-tsgolint": "^7.0.2003",
+    "prettier": "^3.9.9",
+    "tfx-cli": "^0.24.2",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.2",
+    "webpack": "^5.111.1",
+    "webpack-cli": "^7.2.3",
+    "webpack-dev-server": "^6.0.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
+  }
+}

@@ -1,0 +1,6 @@
+dist
+node_modules
+.vs
+*.vsix
+package-lock.json
+src/page.html

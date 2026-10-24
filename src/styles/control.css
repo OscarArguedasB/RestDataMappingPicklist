@@ -1,0 +1,727 @@
+/* The picklist control inside the work item form (and in the setup page's preview). */
+
+.rp-control {
+  padding: 2px 0;
+}
+
+.rp-combobox {
+  position: relative;
+}
+
+/* Leaves room for the list's shadow inside the frame. */
+.rp-combobox[data-open] {
+  padding-bottom: 14px;
+}
+
+/* ---------- Field ---------- */
+
+.rp-field {
+  display: flex;
+  align-items: center;
+  min-height: var(--rp-field-height);
+  padding-right: 3px;
+  border: 1px solid var(--rp-border);
+  border-radius: var(--rp-radius);
+  background-color: transparent;
+  cursor: text;
+  transition:
+    border-color 120ms var(--rp-ease),
+    box-shadow 120ms var(--rp-ease),
+    background-color 120ms var(--rp-ease);
+}
+
+.rp-field:hover {
+  border-color: var(--rp-border-strong);
+}
+
+/* Changed but not saved yet. */
+.rp-field[data-tone='dirty'] {
+  border-color: var(--rp-accent);
+  background-color: var(--rp-accent-wash);
+}
+
+/* Required and empty, or rejected by a work item rule. */
+.rp-field[data-tone='error'] {
+  border-color: var(--rp-danger);
+  background-color: var(--rp-danger-wash);
+}
+
+.rp-field:focus-within {
+  border-color: var(--rp-focus);
+  box-shadow: inset 0 0 0 1px var(--rp-focus);
+}
+
+.rp-field[data-tone='error']:focus-within {
+  border-color: var(--rp-danger);
+  box-shadow: inset 0 0 0 1px var(--rp-danger);
+}
+
+.rp-field[data-readonly] {
+  border-color: var(--rp-separator);
+  background-color: var(--rp-fill-subtle);
+  box-shadow: none;
+  cursor: default;
+}
+
+.rp-field[data-disabled] {
+  cursor: progress;
+}
+
+.rp-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: calc(var(--rp-field-height) - 2px);
+  margin: 0;
+  padding: 0 6px 0 10px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--rp-font-size);
+  text-overflow: ellipsis;
+}
+
+.rp-input::placeholder {
+  color: var(--rp-text-secondary);
+  opacity: 1;
+}
+
+.rp-input:disabled {
+  color: var(--rp-text-disabled);
+  cursor: progress;
+}
+
+.rp-field[data-readonly] .rp-input {
+  color: var(--rp-text-secondary);
+  cursor: default;
+}
+
+/* ---------- Multiple values: chips before the text box ---------- */
+
+/* The field grows a line at a time as chips wrap; the buttons stay on the first line. */
+.rp-field[data-multiple] {
+  align-items: flex-start;
+}
+
+.rp-field[data-multiple] > .rp-accessories {
+  min-height: calc(var(--rp-field-height) - 2px);
+}
+
+.rp-values {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  /* Centers one line of chips in the field's normal height. */
+  padding: calc((var(--rp-field-height) - 2px - var(--rp-chip-height)) / 2) 0
+    calc((var(--rp-field-height) - 2px - var(--rp-chip-height)) / 2) 3px;
+}
+
+.rp-values > .rp-input {
+  flex: 1 1 64px;
+  min-width: 64px;
+  height: var(--rp-chip-height);
+  padding-left: 4px;
+}
+
+/* Without chips the text lines up with the single-value field. */
+.rp-values > .rp-input:first-child {
+  padding-left: 7px;
+}
+
+.rp-chip {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  height: var(--rp-chip-height);
+  padding: 0 1px 0 9px;
+  /* Transparent until high contrast mode draws it. */
+  border: 1px solid transparent;
+  border-radius: calc(var(--rp-chip-height) / 2);
+  background-color: var(--rp-fill-pressed);
+  color: var(--rp-text);
+  font-size: var(--rp-chip-font-size);
+  line-height: calc(var(--rp-chip-height) - 2px);
+  cursor: default;
+}
+
+.rp-chip--static {
+  padding-right: 9px;
+}
+
+.rp-field[data-readonly] .rp-chip,
+.rp-field[data-disabled] .rp-chip {
+  background-color: var(--rp-fill-hover);
+  color: var(--rp-text-secondary);
+}
+
+.rp-chip__text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rp-chip__remove {
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: calc(var(--rp-chip-height) - 4px);
+  height: calc(var(--rp-chip-height) - 4px);
+  margin: 0 0 0 2px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--rp-text-secondary);
+  cursor: pointer;
+  transition:
+    background-color 120ms var(--rp-ease),
+    color 120ms var(--rp-ease);
+}
+
+.rp-chip__remove .rp-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.rp-chip__remove:hover {
+  background-color: var(--rp-fill-pressed);
+  color: var(--rp-text);
+}
+
+.rp-chip__remove:active {
+  background-color: var(--rp-fill-pressed);
+}
+
+.rp-chip__remove:focus-visible {
+  outline: 2px solid var(--rp-focus);
+  outline-offset: 0;
+}
+
+/* Touch screens: the remove target reaches 44 px without making the chip taller. */
+@media (pointer: coarse) {
+  .rp-chip__remove::after {
+    position: absolute;
+    inset: -8px -6px;
+    content: '';
+  }
+}
+
+/* ---------- Trailing accessories ---------- */
+
+.rp-accessories {
+  display: flex;
+  flex: none;
+  align-items: center;
+  color: var(--rp-text-secondary);
+}
+
+.rp-accessories > .rp-spinner {
+  margin: 0 5px;
+}
+
+.rp-icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: var(--rp-hit);
+  height: var(--rp-hit);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--rp-radius);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    background-color 120ms var(--rp-ease),
+    color 120ms var(--rp-ease),
+    opacity 120ms var(--rp-ease);
+}
+
+.rp-icon-button:hover {
+  background-color: var(--rp-fill-hover);
+  color: var(--rp-text);
+}
+
+.rp-icon-button:active {
+  background-color: var(--rp-fill-pressed);
+}
+
+.rp-icon-button:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.rp-icon-button:focus-visible {
+  outline: 2px solid var(--rp-focus);
+  outline-offset: -2px;
+}
+
+.rp-chevron .rp-icon {
+  transition: transform 160ms var(--rp-ease);
+}
+
+.rp-combobox[data-open] .rp-chevron .rp-icon {
+  transform: rotate(180deg);
+}
+
+/* The clear button appears on hover or focus, and always on touch screens. */
+.rp-clear {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.rp-field:hover .rp-clear,
+.rp-field:focus-within .rp-clear {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (hover: none) {
+  .rp-clear {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* The "edited" dot, like the one macOS shows in a window's close button for unsaved changes. */
+.rp-unsaved-dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin: 0 7px;
+  border-radius: 50%;
+  background-color: var(--rp-accent);
+}
+
+.rp-status-icon {
+  display: inline-grid;
+  place-items: center;
+  width: var(--rp-hit);
+  height: var(--rp-hit);
+  color: var(--rp-danger-icon);
+}
+
+/* ---------- List ---------- */
+
+.rp-popup {
+  margin-top: 4px;
+  padding: 4px;
+  border: 1px solid var(--rp-separator);
+  border-radius: var(--rp-radius-large);
+  background-color: var(--rp-surface-raised);
+  box-shadow: var(--rp-shadow);
+  transform-origin: top center;
+  animation: rp-popup-in 140ms var(--rp-ease);
+}
+
+@keyframes rp-popup-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.985);
+  }
+}
+
+.rp-listbox {
+  position: relative;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rp-border) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.rp-listbox__canvas {
+  position: relative;
+}
+
+.rp-option {
+  position: absolute;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px 0 10px;
+  border-radius: var(--rp-radius);
+  color: var(--rp-text);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* The option the keyboard or pointer is on. */
+.rp-option.is-active {
+  background-color: var(--rp-fill-active);
+}
+
+.rp-option.is-current {
+  font-weight: 600;
+}
+
+/* Multiple values: the field is full, so only selected options can be chosen (to remove them). */
+.rp-option[aria-disabled='true'] {
+  color: var(--rp-text-disabled);
+  cursor: not-allowed;
+}
+
+.rp-option__label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Value and second line, stacked. */
+.rp-option__text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.rp-option__text > .rp-option__label {
+  flex: none;
+}
+
+.rp-option__detail {
+  overflow: hidden;
+  color: var(--rp-text-secondary);
+  font-size: var(--rp-font-size-detail);
+  font-weight: 400;
+  line-height: 1.34;
+  text-overflow: ellipsis;
+}
+
+.rp-option[aria-disabled='true'] .rp-option__detail {
+  color: inherit;
+}
+
+.rp-option__check {
+  flex: none;
+  color: var(--rp-accent-text);
+}
+
+/* Multiple values: a checkbox-like square on every option, so it's clear several can be picked. */
+.rp-option__box {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--rp-border);
+  border-radius: 3px;
+  color: var(--rp-on-accent);
+}
+
+.rp-option__box .rp-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.rp-option.is-selected .rp-option__box {
+  border-color: var(--rp-accent);
+  background-color: var(--rp-accent);
+}
+
+.rp-option[aria-disabled='true'] .rp-option__box {
+  border-color: var(--rp-text-disabled);
+}
+
+@media (pointer: coarse) {
+  .rp-option__box {
+    width: 20px;
+    height: 20px;
+  }
+
+  .rp-option__box .rp-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.rp-mark {
+  border-radius: 2px;
+  background: none;
+  color: var(--rp-accent-text);
+  font-weight: 600;
+}
+
+.rp-popup-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 6px 8px;
+  color: var(--rp-text-secondary);
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.rp-popup-status--error {
+  align-items: flex-start;
+  color: var(--rp-text);
+}
+
+.rp-popup-status--error > .rp-icon {
+  margin-top: 1px;
+  color: var(--rp-danger-icon);
+}
+
+.rp-popup-status--error + .rp-listbox {
+  margin-top: 4px;
+  border-top: 1px solid var(--rp-separator);
+}
+
+.rp-popup-status__text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Under the list: more pages loading, a cap on the number of items, a full field. */
+.rp-popup-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 6px 8px 2px;
+  border-top: 1px solid var(--rp-separator);
+  color: var(--rp-text-secondary);
+  font-size: var(--rp-font-size-small);
+  line-height: 16px;
+}
+
+.rp-popup-footer__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 18px;
+}
+
+.rp-popup-footer__row--limit {
+  align-items: flex-start;
+  color: var(--rp-text);
+}
+
+.rp-popup-footer__row--limit > .rp-icon {
+  width: 14px;
+  height: 14px;
+  margin-top: 1px;
+  color: var(--rp-warning);
+}
+
+.rp-link-button {
+  flex: none;
+  margin: -3px -2px -3px 0;
+  padding: 3px 8px;
+  border: 0;
+  border-radius: var(--rp-radius);
+  background: none;
+  color: var(--rp-accent-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rp-link-button:hover {
+  background-color: var(--rp-fill-hover);
+}
+
+.rp-link-button:focus-visible {
+  outline: 2px solid var(--rp-focus);
+  outline-offset: 0;
+}
+
+/* ---------- Message under the field ---------- */
+
+/* A warning by default: body text with the warning icon (the warning color is only just 4.5:1 as
+   text, and this is 12 px). */
+.rp-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 4px 0 0;
+  color: var(--rp-text);
+  font-size: var(--rp-font-size-small);
+  line-height: 16px;
+}
+
+.rp-notice > .rp-icon {
+  width: 14px;
+  height: 14px;
+  margin-top: 1px;
+}
+
+.rp-notice:not([data-tone]) > .rp-icon {
+  color: var(--rp-warning);
+}
+
+/* Information rather than a problem, such as where a control's settings are managed now. */
+.rp-notice[data-tone='info'] {
+  color: var(--rp-text-secondary);
+}
+
+/* A setup problem shown under the field: an error, as it is in the open list and on the setup
+   page. Body text with the error icon, so it reads in every theme. */
+.rp-notice[data-tone='error'] {
+  color: var(--rp-text);
+}
+
+.rp-notice[data-tone='error'] > .rp-icon {
+  color: var(--rp-danger-icon);
+}
+
+/* The moved state's short link stays on one line, so its focus ring is one box. */
+.rp-notice[data-tone='info'] .rp-message-link {
+  white-space: nowrap;
+}
+
+/* ---------- Links in messages ---------- */
+
+/* Underlined, so a link never depends on its color to be noticed. */
+.rp-message-link {
+  border-radius: 2px;
+  color: var(--rp-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.rp-message-link:hover {
+  text-decoration-thickness: 2px;
+}
+
+.rp-message-link:focus-visible {
+  outline: 2px solid var(--rp-focus);
+  outline-offset: 1px;
+}
+
+/* ---------- Accessibility preferences ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .rp-popup {
+    animation: none;
+  }
+
+  .rp-field,
+  .rp-icon-button,
+  .rp-chip__remove,
+  .rp-chevron .rp-icon {
+    transition: none;
+  }
+}
+
+/* Windows high contrast: keep the states distinguishable without relying on custom colors. */
+@media (forced-colors: active) {
+  .rp-field {
+    forced-color-adjust: none;
+    border-color: FieldText;
+    background-color: Field;
+    color: FieldText;
+  }
+
+  .rp-field[data-tone='dirty'] {
+    border-color: Highlight;
+    box-shadow: inset 0 0 0 1px Highlight;
+  }
+
+  .rp-field[data-tone='error'] {
+    border-style: dashed;
+    border-color: FieldText;
+    box-shadow: inset 0 0 0 1px FieldText;
+  }
+
+  .rp-field:focus-within {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+  }
+
+  .rp-input::placeholder {
+    color: GrayText;
+  }
+
+  .rp-popup {
+    border-color: CanvasText;
+  }
+
+  .rp-unsaved-dot {
+    forced-color-adjust: none;
+    background-color: Highlight;
+  }
+
+  /* The field opts out of forced colors (above), so chips must use system colors themselves. */
+  .rp-chip {
+    border-color: FieldText;
+    background-color: Field;
+    color: FieldText;
+  }
+
+  /* Read-only text stays readable: the dimmed theme colors can vanish on a system background. */
+  .rp-field[data-readonly] .rp-input,
+  .rp-field[data-readonly] .rp-chip,
+  .rp-field[data-disabled] .rp-chip {
+    color: FieldText;
+  }
+
+  .rp-chip__remove {
+    color: FieldText;
+  }
+
+  .rp-chip__remove:hover {
+    background-color: Highlight;
+    color: HighlightText;
+  }
+
+  .rp-option.is-active {
+    forced-color-adjust: none;
+    background-color: Highlight;
+    color: HighlightText;
+  }
+
+  .rp-option.is-active .rp-option__detail,
+  .rp-option.is-active .rp-option__check {
+    color: HighlightText;
+  }
+
+  .rp-option[aria-disabled='true'] {
+    color: GrayText;
+  }
+
+  .rp-option__box {
+    forced-color-adjust: none;
+    border-color: CanvasText;
+    background-color: Canvas;
+    color: CanvasText;
+  }
+
+  .rp-option.is-selected .rp-option__box {
+    border-color: CanvasText;
+    background-color: Canvas;
+  }
+
+  .rp-option[aria-disabled='true'] .rp-option__box {
+    border-color: GrayText;
+  }
+
+  .rp-option.is-active .rp-option__box {
+    border-color: HighlightText;
+    background-color: Highlight;
+    color: HighlightText;
+  }
+
+  .rp-popup-footer {
+    border-top-color: CanvasText;
+  }
+
+  .rp-mark {
+    color: inherit;
+    text-decoration: underline;
+  }
+}

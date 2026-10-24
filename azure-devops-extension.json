@@ -1,0 +1,146 @@
+{
+  "manifestVersion": 1,
+  "id": "RestDataMappingPicklist",
+  "publisher": "OscarArguedasBarboza",
+  "version": "4.0.0",
+  "name": "Rest Data Mapping Picklist",
+  "description": "Pick work item values from any REST API, with search, multiple values, paging and copying into other fields. Manage API configurations per process, with OAuth 2.0 sign-in.",
+  "public": true,
+  "icons": {
+    "default": "img/Logo.png"
+  },
+  "categories": ["Azure Boards"],
+  "targets": [
+    {
+      "id": "Microsoft.VisualStudio.Services.Cloud"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "uri": "https://github.com/OscarArguedasB/RestDataMappingPicklist"
+  },
+  "links": {
+    "getstarted": {
+      "uri": "https://github.com/OscarArguedasB/RestDataMappingPicklist/blob/main/overview.md#set-it-up"
+    },
+    "learn": {
+      "uri": "https://github.com/OscarArguedasB/RestDataMappingPicklist/blob/main/overview.md"
+    },
+    "support": {
+      "uri": "https://github.com/OscarArguedasB/RestDataMappingPicklist/blob/main/SUPPORT.md"
+    },
+    "privacypolicy": {
+      "uri": "https://github.com/OscarArguedasB/RestDataMappingPicklist/blob/main/PRIVACY.md"
+    },
+    "license": {
+      "uri": "https://github.com/OscarArguedasB/RestDataMappingPicklist/blob/main/LICENSE"
+    },
+    "repository": {
+      "uri": "https://github.com/OscarArguedasB/RestDataMappingPicklist"
+    },
+    "issues": {
+      "uri": "https://github.com/OscarArguedasB/RestDataMappingPicklist/issues"
+    }
+  },
+  "branding": {
+    "color": "#EAF2FD",
+    "theme": "light"
+  },
+  "tags": [
+    "Work Items",
+    "Work Item Control",
+    "Custom Control",
+    "Picklist",
+    "Dropdown",
+    "Lookup",
+    "Multi-select",
+    "REST API",
+    "JSON",
+    "Form",
+    "ServiceNow"
+  ],
+  "content": {
+    "details": {
+      "path": "overview.md"
+    },
+    "license": {
+      "path": "LICENSE"
+    }
+  },
+  "screenshots": [
+    {
+      "path": "img/screenshots/control.png"
+    },
+    {
+      "path": "img/screenshots/setup-configurations.png"
+    },
+    {
+      "path": "img/screenshots/setup-editor.png"
+    },
+    {
+      "path": "img/screenshots/setup-policy.png"
+    }
+  ],
+  "scopes": ["vso.work", "vso.work_write", "vso.extension.data_write"],
+  "contributions": [
+    {
+      "id": "rest-data-mapping-picklist",
+      "type": "ms.vss-work-web.work-item-form-control",
+      "description": "Searchable picklist filled from any REST API",
+      "targets": ["ms.vss-work-web.work-item-form"],
+      "properties": {
+        "name": "Rest Data Mapping Picklist",
+        "uri": "/dist/selector.html",
+        "height": 36,
+        "inputs": [
+          {
+            "id": "FieldName",
+            "name": "Field to fill in",
+            "description": "Text fields. A picklist works only if it accepts values people type: the extension can’t add items to it",
+            "type": "WorkItemField",
+            "properties": {
+              "workItemFieldTypes": ["String", "PlainText", "HTML"]
+            },
+            "validation": {
+              "dataType": "String",
+              "isRequired": true
+            }
+          },
+          {
+            "id": "Configuration",
+            "name": "Configuration name. ⚠ API configuration has moved: you can find it under Organization settings › Extensions › REST Picklist",
+            "description": "Enter a configuration shared with this process. Leave it empty and the field shows a link to that page",
+            "validation": {
+              "dataType": "String",
+              "isRequired": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "rest-picklist-setup",
+      "type": "ms.vss-web.hub",
+      "description": "Manage REST Picklist API configurations for each process, their credentials and the organization’s security policy.",
+      "targets": ["ms.vss-web.collection-admin-hub-group"],
+      "properties": {
+        "name": "REST Picklist",
+        "uri": "/dist/configurator.html"
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "dist",
+      "addressable": true
+    },
+    {
+      "path": "img",
+      "addressable": true
+    },
+    {
+      "path": "THIRD-PARTY-NOTICES.md",
+      "addressable": true
+    }
+  ]
+}

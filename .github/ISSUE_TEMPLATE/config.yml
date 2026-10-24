@@ -1,0 +1,6 @@
+# Blank issues stay open for questions and permission requests (see LICENSE).
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/OscarArguedasB/RestDataMappingPicklist/security/policy
+    about: Report it privately, as the security policy describes, not in a public issue.

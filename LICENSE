@@ -1,0 +1,20 @@
+REST Data Mapping Picklist
+Copyright (c) 2026 Oscar Arguedas Barboza. All rights reserved.
+
+This software, including its source code, documentation, images and other files in this repository (the "Software"), is owned by Oscar Arguedas Barboza and protected by copyright law.
+
+1. Using the extension. You may install the published extension from the Visual Studio Marketplace in your Azure DevOps organizations and use it free of charge, subject to these terms and the Visual Studio Marketplace terms.
+
+2. Source code. The source code is published for transparency and review. Except as allowed in section 1 or by applicable law, you may not copy, modify, merge, publish, distribute, sublicense, sell or create derivative works of the Software, in whole or in part, without the copyright holder's prior written permission. GitHub's Terms of Service allow viewing and forking this repository on GitHub; that grants no other rights.
+
+3. Contributions. By submitting a contribution (for example a pull request, patch or suggestion), you agree that the copyright holder may use, modify and distribute it as part of the Software under any terms, and you confirm that you have the right to grant this.
+
+4. Third-party components. The Software includes open source components licensed under their own terms, listed in THIRD-PARTY-NOTICES.md. Nothing in this license limits your rights under those terms.
+
+5. No warranty. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+6. Limitation of liability. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+7. Termination. These permissions end automatically if you break these terms.
+
+For permission requests, open an issue at https://github.com/OscarArguedasB/RestDataMappingPicklist/issues.

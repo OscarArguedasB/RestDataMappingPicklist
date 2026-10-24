@@ -1,0 +1,14 @@
+# Editor settings for this repository. Prettier reads them too, so its line endings follow
+# end_of_line below. No settings are taken from folders above this one.
+root = true
+
+# Every file: Windows line endings, and a line break at the end.
+[*]
+end_of_line = crlf
+insert_final_newline = true
+
+# Code and JSON: UTF-8, indented with two spaces.
+[*.{js,ts,tsx,json}]
+charset = utf-8
+indent_style = space
+indent_size = 2

@@ -1,0 +1,2371 @@
+/* The "REST Picklist" page under Organization settings. Colors come from theme.css tokens, so
+   light, dark and high contrast themes all work. */
+
+html,
+body {
+  background: var(--rp-surface);
+}
+
+.cf-page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 32px 48px;
+}
+
+/* ---------- Header and tabs ---------- */
+
+.cf-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px 24px;
+  margin-bottom: 16px;
+}
+
+.cf-title {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.cf-subtitle {
+  max-width: 72ch;
+  margin: 0;
+  color: var(--rp-text-secondary);
+}
+
+.cf-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* The file picker is opened by the Import buttons. */
+.cf-file-input {
+  display: none;
+}
+
+.cf-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--rp-separator);
+  scrollbar-width: none;
+}
+
+.cf-tab {
+  position: relative;
+  flex: none;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--rp-radius) var(--rp-radius) 0 0;
+  background: transparent;
+  color: var(--rp-text-secondary);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.cf-tab:hover {
+  background: var(--rp-fill-hover);
+  color: var(--rp-text);
+}
+
+.cf-tab[aria-selected='true'] {
+  color: var(--rp-text);
+  font-weight: 600;
+}
+
+/* Selected: a 2 px underline, like Azure DevOps pivots; weight also changes, so not color alone. */
+.cf-tab[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  right: 8px;
+  bottom: -1px;
+  left: 8px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--rp-accent);
+}
+
+.cf-tab:focus-visible,
+.cf-tabpanel:focus-visible {
+  outline: 2px solid var(--rp-focus);
+  outline-offset: -2px;
+}
+
+.cf-tabpanel:focus-visible {
+  outline-offset: 4px;
+}
+
+.cf-notice {
+  display: block;
+}
+
+.cf-notice:not(:empty) {
+  margin-bottom: 16px;
+}
+
+.cf-notice__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* ---------- Layout ---------- */
+
+.cf-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.cf-settings,
+.cf-side,
+.cf-policy {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.cf-policy {
+  max-width: 820px;
+}
+
+.cf-grid-2,
+.cf-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 16px;
+}
+
+.cf-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.cf-grid-2 > .cf-setting,
+.cf-grid-3 > .cf-setting {
+  margin-top: 16px;
+}
+
+.cf-grid-2 > .cf-issue {
+  grid-column: 1 / -1;
+}
+
+/* ---------- Cards ---------- */
+
+.cf-card {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--rp-separator);
+  border-radius: var(--rp-radius-large);
+  background: var(--rp-surface-raised);
+}
+
+.cf-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.cf-card__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.cf-card__title--section {
+  margin-bottom: 12px;
+}
+
+.cf-card__title[tabindex='-1']:focus {
+  outline: none;
+}
+
+.cf-card__description {
+  margin: 2px 0 0;
+  color: var(--rp-text-secondary);
+  font-size: 13px;
+}
+
+.cf-card__description--spaced {
+  margin: -6px 0 12px;
+}
+
+.cf-step {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--rp-accent-wash);
+  color: var(--rp-accent-text);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ---------- Settings ---------- */
+
+.cf-setting + .cf-setting,
+.cf-setting + .cf-signin,
+.cf-signin > .cf-setting + .cf-setting,
+.cf-signin > * + .cf-note {
+  margin-top: 20px;
+}
+
+fieldset.cf-setting,
+.cf-segmented,
+.cf-suggestions {
+  min-width: 0;
+  margin-right: 0;
+  margin-left: 0;
+  padding: 0;
+  border: 0;
+}
+
+.cf-setting--flag {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.cf-setting__label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 22px;
+}
+
+.cf-label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cf-legend {
+  display: block;
+  margin-bottom: 6px;
+  padding: 0;
+}
+
+.cf-help {
+  margin: 2px 0 8px;
+  color: var(--rp-text-secondary);
+  font-size: 12.5px;
+  line-height: 18px;
+}
+
+.cf-help--after {
+  margin: 6px 0 0;
+}
+
+.cf-setting--flag .cf-help {
+  margin-bottom: 0;
+}
+
+.cf-note {
+  margin: 16px 0 0;
+  color: var(--rp-text-secondary);
+  font-size: 12.5px;
+  line-height: 18px;
+}
+
+.cf-input-group {
+  display: flex;
+  gap: 8px;
+}
+
+.cf-input {
+  width: 100%;
+  min-height: var(--rp-field-height);
+  padding: 5px 10px;
+  border: 1px solid var(--rp-border);
+  border-radius: var(--rp-radius);
+  background: transparent;
+  color: var(--rp-text);
+  font: inherit;
+  font-size: var(--rp-font-size);
+  transition:
+    border-color 120ms var(--rp-ease),
+    box-shadow 120ms var(--rp-ease);
+}
+
+.cf-input::placeholder {
+  color: var(--rp-text-secondary);
+  opacity: 1;
+}
+
+.cf-input:hover {
+  border-color: var(--rp-border-strong);
+}
+
+.cf-input:focus {
+  border-color: var(--rp-focus);
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--rp-focus);
+}
+
+/* Read-only values: quieter than an editable field, like the control's read-only field, and still
+   selectable. (:focus above still draws the focus ring for keyboard users.) */
+.cf-input[readonly],
+.cf-input[readonly]:hover {
+  border-color: var(--rp-separator);
+  background-color: var(--rp-fill-subtle);
+}
+
+textarea.cf-input[readonly] {
+  resize: none;
+}
+
+/* Secret fields have their own Show/Hide button; Edge's built-in eye (and clear) would be a
+   second, unlabeled way to do the same. */
+.cf-input[type='password']::-ms-reveal,
+.cf-input[type='password']::-ms-clear {
+  display: none;
+}
+
+.cf-input--code {
+  font-family: var(--rp-font-mono);
+  font-size: 13px;
+}
+
+textarea.cf-input {
+  display: block;
+  line-height: 20px;
+  resize: vertical;
+}
+
+.cf-select {
+  max-width: 100%;
+  padding-right: 28px;
+  background-color: var(--rp-surface-raised);
+  cursor: pointer;
+}
+
+.cf-select option {
+  background: var(--rp-surface-raised);
+  color: var(--rp-text);
+}
+
+.cf-setting[data-issue='error'] .cf-input {
+  border-color: var(--rp-danger);
+}
+
+.cf-setting[data-issue='error'] .cf-input:focus {
+  box-shadow: inset 0 0 0 1px var(--rp-danger);
+}
+
+.cf-checkbox {
+  width: 18px;
+  height: 18px;
+  margin: 1px 0 0;
+  accent-color: var(--rp-accent);
+}
+
+.cf-number {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cf-number .cf-input {
+  max-width: 10rem;
+}
+
+.cf-number__unit {
+  color: var(--rp-text-secondary);
+  font-size: 13px;
+}
+
+.cf-issue {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 6px 0 0;
+  font-size: 12.5px;
+  line-height: 18px;
+}
+
+.cf-issue > .rp-icon {
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+}
+
+.cf-issue--error {
+  color: var(--rp-danger);
+}
+
+/* Body text with the warning icon: the warning color is only just 4.5:1 as text. */
+.cf-issue--warning {
+  color: var(--rp-text);
+}
+
+.cf-issue--warning > .rp-icon {
+  color: var(--rp-warning);
+}
+
+/* A short “what was found” line under a setting. */
+.cf-state {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  line-height: 18px;
+}
+
+.cf-state > .rp-icon {
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+}
+
+.cf-state--ok > .rp-icon {
+  color: var(--rp-success-icon);
+}
+
+.cf-state--error {
+  color: var(--rp-danger);
+}
+
+.cf-signin {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: var(--rp-radius-large);
+  background: var(--rp-fill-subtle);
+}
+
+.cf-signin > .cf-note {
+  margin-top: 20px;
+}
+
+/* ---------- Segmented control ---------- */
+
+.cf-segmented__options {
+  display: inline-flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+  border: 1px solid var(--rp-border);
+  border-radius: var(--rp-radius);
+}
+
+.cf-segmented__option {
+  position: relative;
+  display: inline-flex;
+}
+
+.cf-segmented__option + .cf-segmented__option {
+  border-left: 1px solid var(--rp-border);
+}
+
+.cf-segmented__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.cf-segmented__input:disabled {
+  cursor: not-allowed;
+}
+
+.cf-segmented__label {
+  display: inline-flex;
+  align-items: center;
+  min-height: calc(var(--rp-field-height) - 2px);
+  padding: 0 14px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.cf-segmented__option:hover .cf-segmented__label {
+  background: var(--rp-fill-hover);
+}
+
+.cf-segmented__input:checked + .cf-segmented__label {
+  background: var(--rp-accent);
+  color: var(--rp-on-accent);
+  font-weight: 600;
+}
+
+.cf-segmented__input:focus-visible + .cf-segmented__label {
+  outline: 2px solid var(--rp-focus);
+  outline-offset: 1px;
+}
+
+.cf-segmented__input:disabled + .cf-segmented__label {
+  color: var(--rp-text-disabled);
+  text-decoration: line-through;
+}
+
+.cf-segmented__option:first-child .cf-segmented__label {
+  border-radius: 3px 0 0 3px;
+}
+
+.cf-segmented__option:last-child .cf-segmented__label {
+  border-radius: 0 3px 3px 0;
+}
+
+/* ---------- Radio group ---------- */
+
+.cf-radio-group .cf-legend,
+.cf-radio-group > .cf-label {
+  margin-bottom: 6px;
+  padding: 0;
+}
+
+.cf-radio {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 4px 0;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.cf-radio__help {
+  display: block;
+  color: var(--rp-text-secondary);
+  font-size: 12.5px;
+}
+
+/* ---------- Buttons, links, code ---------- */
+
+.cf-button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: var(--rp-field-height);
+  padding: 0 14px;
+  border: 1px solid var(--rp-border);
+  border-radius: var(--rp-radius);
+  background: transparent;
+  color: var(--rp-text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 120ms var(--rp-ease),
+    border-color 120ms var(--rp-ease);
+}
+
+.cf-button:hover {
+  background: var(--rp-fill-hover);
+}
+
+.cf-button:active {
+  background: var(--rp-fill-pressed);
+}
+
+.cf-button:focus-visible,
+.cf-link:focus-visible,
+.cf-chip:focus-visible,
+.cf-raw summary:focus-visible,
+.cf-section__toggle:focus-visible {
+  outline: 2px solid var(--rp-focus);
+  outline-offset: 2px;
+}
+
+.cf-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.cf-button:disabled:hover {
+  background: transparent;
+}
+
+.cf-button--small {
+  min-height: 28px;
+  padding: 0 10px;
+  font-size: 12.5px;
+}
+
+.cf-button--primary {
+  border-color: var(--rp-accent);
+  background: var(--rp-accent);
+  color: var(--rp-on-accent);
+}
+
+.cf-button--primary:hover {
+  background: color-mix(in srgb, var(--rp-accent) 88%, black);
+}
+
+.cf-button--primary:disabled:hover {
+  background: var(--rp-accent);
+}
+
+.cf-button--quiet {
+  border-color: transparent;
+  color: var(--rp-accent-text);
+}
+
+.cf-button--danger-fill,
+.cf-button--danger-fill:disabled:hover {
+  border-color: var(--rp-danger);
+  background: var(--rp-danger);
+  /* The page surface contrasts with the danger fill in every theme: 5.22:1 light, 5.75:1 dark,
+     7.34:1 high contrast. (White on the dark theme's light red was 2.86:1.) */
+  color: var(--rp-surface);
+}
+
+.cf-button--danger-fill:hover {
+  /* Toward the text color: darker in light, lighter in dark and high contrast (about 6.5, 6.4
+     and 8.5:1 with the surface-colored label). */
+  background: color-mix(in srgb, var(--rp-danger) 85%, var(--rp-text));
+}
+
+.cf-link {
+  flex: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--rp-accent-text);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cf-link:hover {
+  text-decoration: underline;
+}
+
+/* Links inside a sentence, note or callout are underlined, like the control's message links, so
+   they don't rely on color. */
+.cf-assign__note .cf-link,
+.cf-callout .cf-link,
+.cf-secret-status .cf-link {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Standalone link-buttons (not inside a sentence) get the 24 px desktop target (44 px on touch,
+   below). */
+p > .cf-link:only-child,
+.cf-card__header > .cf-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--rp-hit);
+}
+
+.cf-code,
+.cf-chip code,
+.cf-property code,
+.cf-mapped code {
+  font-family: var(--rp-font-mono);
+  font-size: 12px;
+}
+
+.cf-code {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--rp-fill-hover);
+  word-break: break-word;
+}
+
+.cf-code--wrap {
+  word-break: break-all;
+}
+
+.cf-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 6px;
+  border: 1px solid var(--rp-separator);
+  border-radius: 999px;
+  color: var(--rp-text-secondary);
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 18px;
+  vertical-align: 1px;
+}
+
+.cf-badge--accent {
+  border-color: var(--rp-accent);
+  color: var(--rp-accent-text);
+}
+
+/* ---------- Chips (suggestions) ---------- */
+
+.cf-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.cf-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 30px;
+  padding: 4px 12px;
+  border: 1px solid var(--rp-separator);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--rp-text);
+  font: inherit;
+  font-size: 12.5px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 120ms var(--rp-ease),
+    border-color 120ms var(--rp-ease);
+}
+
+.cf-chip:hover:not(:disabled) {
+  border-color: var(--rp-border);
+  background: var(--rp-fill-hover);
+}
+
+.cf-chip[aria-pressed='true'] {
+  border-color: var(--rp-accent);
+  background: var(--rp-accent-wash);
+  color: var(--rp-accent-text);
+}
+
+.cf-chip[aria-pressed='true'] .cf-chip__main {
+  font-weight: 700;
+}
+
+.cf-chip:disabled {
+  cursor: default;
+}
+
+/* One line: the property, then why it's suggested, which ends in “…” when there's no room. */
+.cf-chip--suggestion {
+  gap: 8px;
+  max-width: 100%;
+  min-width: 0;
+  padding: 4px 12px;
+  border-radius: var(--rp-radius-large);
+}
+
+.cf-chip__main {
+  flex: none;
+  max-width: 100%;
+  overflow: hidden;
+  line-height: 18px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cf-chip__meta {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--rp-text-secondary);
+  font-size: 12px;
+  line-height: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* “More suggestions (2)”: a disclosure; what it reveals wraps on its own row below. */
+.cf-chip--more {
+  gap: 4px;
+}
+
+.cf-chip__chevron {
+  display: inline-flex;
+  transition: transform 150ms var(--rp-ease);
+}
+
+.cf-chip--more[aria-expanded='true'] .cf-chip__chevron {
+  transform: rotate(180deg);
+}
+
+.cf-suggestions__more {
+  display: flex;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+
+.cf-suggestions__more[hidden] {
+  display: none;
+}
+
+.cf-chip--small {
+  min-height: 26px;
+  padding: 2px 10px;
+  font-size: 12px;
+}
+
+/* Row actions stay quiet so the property names and samples lead. */
+.cf-chip--quiet {
+  border-color: transparent;
+  color: var(--rp-accent-text);
+  font-weight: 600;
+}
+
+.cf-chip--quiet:disabled {
+  color: var(--rp-text-secondary);
+}
+
+/* ---------- Collapsible sections ---------- */
+
+.cf-sections {
+  overflow: hidden;
+  border: 1px solid var(--rp-separator);
+  border-radius: var(--rp-radius-large);
+  background: var(--rp-surface-raised);
+}
+
+.cf-section + .cf-section {
+  border-top: 1px solid var(--rp-separator);
+}
+
+.cf-section__heading {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.cf-section__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 56px;
+  padding: 10px 20px;
+  border: 0;
+  background: transparent;
+  color: var(--rp-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cf-section__toggle:hover {
+  background: var(--rp-fill-hover);
+}
+
+.cf-section__toggle:focus-visible {
+  outline-offset: -2px;
+}
+
+.cf-section__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cf-section__title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.cf-section__summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  color: var(--rp-text-secondary);
+  font-size: 12.5px;
+  line-height: 18px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cf-section__summary[data-attention] {
+  color: var(--rp-danger);
+}
+
+.cf-section__summary .rp-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.cf-section__chevron {
+  display: inline-flex;
+  flex: none;
+  color: var(--rp-text-secondary);
+  transform: rotate(-90deg);
+  transition: transform 150ms var(--rp-ease);
+}
+
+.cf-section[data-open] .cf-section__chevron {
+  transform: none;
+}
+
+.cf-section__panel {
+  padding: 4px 20px 20px;
+}
+
+/* ---------- Test panel ---------- */
+
+.cf-subheading {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cf-hint,
+.cf-empty,
+.cf-meta {
+  margin: 2px 0 0;
+  color: var(--rp-text-secondary);
+  font-size: 12.5px;
+  line-height: 18px;
+}
+
+.cf-hint--spaced {
+  margin-top: 12px;
+}
+
+.cf-hint--stale {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  color: var(--rp-text);
+}
+
+.cf-hint--stale > .rp-icon {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  color: var(--rp-warning);
+}
+
+.cf-empty {
+  margin: 0 0 12px;
+}
+
+.cf-block {
+  margin-top: 20px;
+}
+
+.cf-samples {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 12px;
+  border-radius: var(--rp-radius);
+  background: var(--rp-fill-subtle);
+}
+
+.cf-sample {
+  display: grid;
+  grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+.cf-test__status:empty {
+  display: none;
+}
+
+.cf-progress,
+.cf-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--rp-text-secondary);
+  font-size: 13px;
+}
+
+.cf-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--rp-radius-large);
+  font-size: 13px;
+}
+
+.cf-callout > .rp-icon {
+  margin-top: 2px;
+}
+
+.cf-callout__body {
+  min-width: 0;
+}
+
+.cf-callout p {
+  margin: 0;
+}
+
+.cf-callout p + p {
+  margin-top: 4px;
+}
+
+.cf-callout__title {
+  font-weight: 600;
+}
+
+.cf-card .cf-callout + *,
+.cf-card * + .cf-callout {
+  margin-top: 12px;
+}
+
+.cf-callout--error {
+  background: var(--rp-danger-wash);
+}
+
+.cf-callout--error > .rp-icon {
+  color: var(--rp-danger-icon);
+}
+
+.cf-callout--warning {
+  background: var(--rp-warning-wash);
+}
+
+.cf-callout--warning > .rp-icon {
+  color: var(--rp-warning);
+}
+
+.cf-callout--success {
+  background: var(--rp-success-wash);
+}
+
+.cf-callout--success > .rp-icon {
+  color: var(--rp-success-icon);
+}
+
+.cf-callout--info {
+  background: var(--rp-accent-wash);
+}
+
+.cf-callout--info > .rp-icon {
+  color: var(--rp-accent-text);
+}
+
+.cf-properties {
+  margin: 8px 0 0;
+  padding: 0;
+  border: 1px solid var(--rp-separator);
+  border-radius: var(--rp-radius-large);
+  list-style: none;
+}
+
+.cf-property {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+}
+
+.cf-property + .cf-property {
+  border-top: 1px solid var(--rp-separator);
+}
+
+.cf-property__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cf-property__sample {
+  overflow: hidden;
+  color: var(--rp-text-secondary);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cf-preview {
+  max-width: 420px;
+  margin-top: 8px;
+}
+
+.cf-mapped {
+  display: grid;
+  gap: 6px;
+  max-width: 420px;
+  margin: 12px 0 0;
+  font-size: 12.5px;
+}
+
+.cf-mapped__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cf-mapped dt {
+  min-width: 0;
+}
+
+.cf-mapped dd {
+  margin: 0;
+  overflow: hidden;
+  color: var(--rp-text-secondary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cf-raw {
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 1px solid var(--rp-separator);
+}
+
+.cf-raw summary {
+  width: fit-content;
+  border-radius: var(--rp-radius);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cf-raw pre {
+  max-height: 320px;
+  margin: 8px 0 0;
+  padding: 12px;
+  overflow: auto;
+  border-radius: var(--rp-radius);
+  background: var(--rp-fill-subtle);
+  font-family: var(--rp-font-mono);
+  font-size: 12px;
+  line-height: 18px;
+  white-space: pre;
+}
+
+/* ---------- Values to copy ---------- */
+
+.cf-export {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  border: 1px solid var(--rp-separator);
+  border-radius: var(--rp-radius-large);
+}
+
+.cf-export__row {
+  padding: 10px 12px;
+}
+
+.cf-export__row + .cf-export__row {
+  border-top: 1px solid var(--rp-separator);
+}
+
+.cf-export dt {
+  margin-bottom: 4px;
+  color: var(--rp-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cf-export dd {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+}
+
+.cf-copy {
+  min-height: 26px;
+  padding: 0 8px;
+  font-size: 12px;
+}
+
+/* ---------- Tables ---------- */
+
+.cf-table {
+  width: 100%;
+  margin-top: 4px;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.cf-table th,
+.cf-table td {
+  padding: 10px 12px 10px 0;
+  border-bottom: 1px solid var(--rp-separator);
+  text-align: left;
+  vertical-align: top;
+}
+
+.cf-table thead th {
+  color: var(--rp-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cf-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.cf-table tbody th {
+  font-weight: 400;
+}
+
+.cf-table__name {
+  display: block;
+  font-weight: 600;
+}
+
+.cf-table__meta {
+  display: block;
+  color: var(--rp-text-secondary);
+  font-size: 12px;
+}
+
+.cf-table__warning {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+  color: var(--rp-text);
+  font-size: 12px;
+}
+
+.cf-table__warning .rp-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--rp-warning);
+}
+
+.cf-table__actions {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.cf-table__actions .cf-button + .cf-button {
+  margin-left: 4px;
+}
+
+.cf-empty-state {
+  padding: 8px 0;
+}
+
+.cf-empty-state__title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.cf-empty-state .cf-button {
+  margin-top: 12px;
+}
+
+/* ---------- Local demo ---------- */
+
+.cf-demo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.cf-demo .cf-badge {
+  margin-left: 0;
+}
+
+.cf-demo__select {
+  width: auto;
+  max-width: 100%;
+}
+
+.cf-permission-error {
+  display: block;
+}
+
+.cf-permission-error:not(:empty) {
+  margin-bottom: 16px;
+}
+
+/* ---------- Configurations tab ---------- */
+
+.cf-intro {
+  max-width: 72ch;
+  margin: 0 0 20px;
+  color: var(--rp-text-secondary);
+}
+
+/* Processes on the left, the chosen one on the right; one column on narrow screens. */
+.cf-configs {
+  display: grid;
+  grid-template-columns: minmax(200px, 260px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.cf-processes {
+  position: sticky;
+  top: 16px;
+  min-width: 0;
+}
+
+.cf-processes__title,
+.cf-process-group {
+  margin: 0 0 8px;
+  color: var(--rp-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+.cf-process-group {
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 1px solid var(--rp-separator);
+}
+
+.cf-process-list {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cf-process {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 6px 10px 6px 12px;
+  border: 0;
+  border-radius: var(--rp-radius);
+  background: transparent;
+  color: var(--rp-text);
+  font: inherit;
+  text-align: left;
+}
+
+button.cf-process {
+  cursor: pointer;
+}
+
+button.cf-process:hover {
+  background: var(--rp-fill-hover);
+}
+
+button.cf-process:focus-visible {
+  outline: 2px solid var(--rp-focus);
+  outline-offset: -2px;
+}
+
+/* The chosen process stays highlighted: a fill, a bar at its start and a heavier name, so it
+   doesn't rely on color alone. */
+.cf-process[aria-current='true'] {
+  background: var(--rp-fill-active);
+}
+
+.cf-process[aria-current='true']::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 0;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--rp-accent);
+}
+
+.cf-process[aria-current='true'] .cf-process__name {
+  font-weight: 600;
+}
+
+.cf-process__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cf-process__name {
+  overflow-wrap: anywhere;
+}
+
+.cf-process__kind {
+  color: var(--rp-text-secondary);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.cf-process__count {
+  flex: none;
+  min-width: 24px;
+  color: var(--rp-text-secondary);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.cf-process--static .cf-process__name {
+  color: var(--rp-text-secondary);
+}
+
+/* Narrow screens choose the process with a native select instead. */
+.cf-process-select {
+  display: none;
+}
+
+.cf-process-view {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.cf-process-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px 24px;
+}
+
+.cf-process-header__text {
+  min-width: 0;
+}
+
+.cf-process-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  overflow-wrap: anywhere;
+}
+
+.cf-process-title:focus {
+  outline: none;
+}
+
+.cf-process-title:focus-visible {
+  outline: 2px solid var(--rp-focus);
+  outline-offset: 2px;
+}
+
+.cf-process-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.cf-permission {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 4px 0 0;
+  color: var(--rp-text-secondary);
+}
+
+.cf-permission > .rp-icon,
+.cf-permission > .rp-spinner {
+  margin-top: 3px;
+}
+
+.cf-permission--editable > .rp-icon {
+  color: var(--rp-success-icon);
+}
+
+.cf-permission--unverified > .rp-icon {
+  color: var(--rp-warning);
+}
+
+.cf-legacy__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.cf-callout p.cf-legacy__actions {
+  margin-top: 10px;
+}
+
+.cf-scan-progress {
+  display: block;
+}
+
+.cf-scan-progress:empty {
+  display: none;
+}
+
+.cf-empty-state {
+  padding: 24px;
+  border: 1px dashed var(--rp-border);
+  border-radius: var(--rp-radius-large);
+}
+
+.cf-empty-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 12px 0 0;
+}
+
+.cf-empty-state .cf-empty-state__actions .cf-button {
+  margin-top: 0;
+}
+
+/* ---------- Configuration rows ---------- */
+
+/* No overflow clipping here: each row's “More actions” menu opens over what follows. */
+.cf-config-list {
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--rp-separator);
+  border-radius: var(--rp-radius-large);
+  background: var(--rp-surface-raised);
+  list-style: none;
+}
+
+.cf-config {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding: 16px 20px;
+}
+
+.cf-config + .cf-config {
+  border-top: 1px solid var(--rp-separator);
+}
+
+.cf-config__main {
+  min-width: 0;
+}
+
+.cf-config__name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+  overflow-wrap: anywhere;
+}
+
+.cf-config__aliases,
+.cf-config__meta {
+  margin: 2px 0 0;
+  color: var(--rp-text-secondary);
+  font-size: 12px;
+  line-height: 16px;
+  overflow-wrap: anywhere;
+}
+
+.cf-config__status {
+  margin: 4px 0 0;
+  color: var(--rp-text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.cf-config__meta {
+  margin-top: 6px;
+}
+
+.cf-config__actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ---------- More actions menu ---------- */
+
+.cf-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+.cf-button--icon {
+  width: var(--rp-field-height);
+  padding: 0;
+  border-color: transparent;
+}
+
+.cf-menu__popup {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 20;
+  display: grid;
+  min-width: 180px;
+  max-width: min(280px, calc(100vw - 32px));
+  padding: 4px;
+  /* Floating surfaces use the 50% border: the separator is 1.2:1 on black in high contrast. */
+  border: 1px solid var(--rp-border);
+  border-radius: var(--rp-radius-large);
+  background: var(--rp-surface-raised);
+  box-shadow: var(--rp-shadow);
+}
+
+/* Set by MenuButton when lining up with the button's right edge would leave the page. */
+.cf-menu__popup[data-align='start'] {
+  right: auto;
+  left: 0;
+}
+
+.cf-menu__item {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 4px 12px;
+  border: 0;
+  border-radius: var(--rp-radius);
+  background: transparent;
+  color: var(--rp-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cf-menu__item:hover,
+.cf-menu__item:focus {
+  background: var(--rp-fill-hover);
+}
+
+.cf-menu__item:focus-visible {
+  outline: 2px solid var(--rp-focus);
+  outline-offset: -2px;
+}
+
+/* ---------- Controls in this process ---------- */
+
+.cf-controls,
+.cf-orphans {
+  min-width: 0;
+  margin-top: 8px;
+}
+
+.cf-section-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.cf-section-title:focus {
+  outline: none;
+}
+
+.cf-section-title:focus-visible {
+  outline: 2px solid var(--rp-focus);
+  outline-offset: 2px;
+}
+
+.cf-section-description {
+  max-width: 72ch;
+  margin: 4px 0 12px;
+  color: var(--rp-text-secondary);
+}
+
+.cf-controls__table td,
+.cf-controls__table th {
+  vertical-align: top;
+}
+
+.cf-controls__table tbody th .cf-table__name {
+  font-weight: 600;
+}
+
+.cf-assign {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.cf-assign__select {
+  width: auto;
+  min-width: min(14rem, 100%);
+  max-width: 100%;
+}
+
+.cf-assign__actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.cf-assign__state {
+  font-size: 13px;
+}
+
+.cf-assign__note {
+  margin: 6px 0 0;
+  color: var(--rp-text-secondary);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.cf-assign__note .cf-link {
+  font-size: 12px;
+}
+
+.cf-row-result {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 6px 0 0;
+  font-size: 12.5px;
+  line-height: 18px;
+}
+
+.cf-row-result > .rp-icon {
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+}
+
+.cf-row-result--success > .rp-icon {
+  color: var(--rp-success-icon);
+}
+
+/* Red text sits on the page or card surface, never on a red wash (contrast in dark themes). */
+.cf-row-result--error {
+  color: var(--rp-danger);
+}
+
+/* ---------- Move, import and other dialogs ---------- */
+
+.cf-plan,
+.cf-import {
+  margin: 0 0 12px;
+  padding: 0;
+  border: 1px solid var(--rp-separator);
+  border-radius: var(--rp-radius-large);
+  list-style: none;
+}
+
+.cf-plan__group,
+.cf-import__row {
+  padding: 12px 14px;
+}
+
+.cf-plan__group + .cf-plan__group,
+.cf-import__row + .cf-import__row {
+  border-top: 1px solid var(--rp-separator);
+}
+
+.cf-dialog__body p.cf-plan__title {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.cf-dialog__body p.cf-plan__note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 4px 0 0;
+  font-size: 13px;
+}
+
+.cf-plan__note > .rp-icon {
+  width: 14px;
+  height: 14px;
+  margin-top: 3px;
+  color: var(--rp-success-icon);
+}
+
+.cf-plan__note--warning > .rp-icon {
+  color: var(--rp-warning);
+}
+
+.cf-plan__note--error {
+  color: var(--rp-danger);
+}
+
+.cf-plan__note--error > .rp-icon {
+  color: currentColor;
+}
+
+.cf-plan__controls {
+  display: grid;
+  gap: 4px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cf-plan__controls li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 12px;
+  font-size: 13px;
+}
+
+.cf-plan__controls .cf-issue {
+  flex-basis: 100%;
+}
+
+/* One warning style in the Move dialog, like its “Needs the token again” notes: body text with
+   the warning icon. */
+.cf-plan__controls .cf-issue--warning,
+.cf-plan__problems .cf-issue--warning {
+  color: var(--rp-text);
+}
+
+.cf-plan__controls .cf-issue--warning > .rp-icon,
+.cf-plan__problems .cf-issue--warning > .rp-icon {
+  color: var(--rp-warning);
+}
+
+.cf-plan__control {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.cf-plan__result {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: var(--rp-text-secondary);
+  font-size: 12.5px;
+}
+
+.cf-plan__result > .rp-icon {
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+}
+
+.cf-plan__result--success {
+  color: var(--rp-text);
+}
+
+.cf-plan__result--success > .rp-icon {
+  color: var(--rp-success-icon);
+}
+
+.cf-plan__result--error {
+  color: var(--rp-danger);
+}
+
+/* Moved, but not fully: body text with the warning icon. */
+.cf-plan__result--warning > .rp-icon {
+  color: var(--rp-warning);
+}
+
+.cf-dialog__body p.cf-plan__heading {
+  margin: 16px 0 6px;
+  font-weight: 600;
+}
+
+.cf-plan__problems {
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.cf-plan__status {
+  display: block;
+  font-weight: 600;
+}
+
+.cf-plan__status:empty {
+  display: none;
+}
+
+.cf-share {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 12px;
+  padding: 0;
+  border: 0;
+}
+
+.cf-share .cf-setting + .cf-setting {
+  margin-top: 0;
+}
+
+.cf-dialog__body p.cf-share__consequence {
+  margin-top: 12px;
+}
+
+.cf-import__row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.cf-import__body {
+  min-width: 0;
+}
+
+.cf-import__body .cf-setting {
+  margin-top: 8px;
+}
+
+.cf-dialog__body p.cf-import__meta {
+  margin: 2px 0 0;
+  color: var(--rp-text-secondary);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Security policy, read only ---------- */
+
+.cf-policy-facts {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.cf-policy-facts__row {
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  gap: 4px 16px;
+  padding: 10px 0;
+}
+
+.cf-policy-facts__row + .cf-policy-facts__row {
+  border-top: 1px solid var(--rp-separator);
+}
+
+.cf-policy-facts dt {
+  color: var(--rp-text-secondary);
+}
+
+.cf-policy-facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.cf-policy-facts__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---------- Security policy ---------- */
+
+.cf-always-on {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.cf-always-on > .rp-icon {
+  margin-top: 3px;
+  color: var(--rp-success-icon);
+}
+
+.cf-always-on .cf-help {
+  margin-bottom: 0;
+}
+
+/* The Save bar stays pinned to the bottom while the policy scrolls under it: an opaque surface
+   with a top border and a soft shadow, so it reads as a layer above the cards. It stays in the
+   flow (sticky, not fixed), so scrolled to the end it sits below the last card, never over it. */
+.cf-actionbar {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  /* Like the editor's footer: the state at the start, the actions (Save last) at the end. */
+  justify-content: space-between;
+  gap: 8px 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--rp-separator);
+  background-color: var(--rp-surface);
+  box-shadow: 0 -6px 12px -6px var(--callout-shadow-color, rgba(0, 0, 0, 0.132));
+}
+
+/* PolicyTab sets the bar's height here while it's shown, so fields reached with Tab (or find in
+   page) scroll into view above the bar instead of under it. */
+html {
+  scroll-padding-bottom: var(--cf-actionbar-space, 0px);
+}
+
+.cf-actionbar__state {
+  margin: 0;
+  color: var(--rp-text-secondary);
+  font-size: 13px;
+}
+
+.cf-unsaved {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--rp-text);
+  font-weight: 600;
+}
+
+.cf-unsaved__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--rp-accent);
+}
+
+/* ---------- Dialog ---------- */
+
+.cf-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: color-mix(in srgb, black 40%, transparent);
+}
+
+.cf-dialog {
+  width: min(520px, 100%);
+  max-height: calc(100vh - 32px);
+  padding: 24px;
+  overflow: auto;
+  /* The 50% border: in high contrast the backdrop is black too, so the edge has to show. */
+  border: 1px solid var(--rp-border);
+  border-radius: var(--rp-radius-large);
+  background: var(--rp-surface-raised);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+  color: var(--rp-text);
+  font-family: var(--rp-font-family);
+  font-size: 14px;
+}
+
+.cf-dialog:focus {
+  outline: none;
+}
+
+.cf-dialog__title {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.cf-dialog__body p {
+  margin: 0 0 10px;
+}
+
+.cf-dialog__list {
+  margin: 0 0 12px;
+  padding-left: 20px;
+}
+
+.cf-dialog__list li + li {
+  margin-top: 4px;
+}
+
+/* Cancel leads, the action that does the work trails, like Azure DevOps dialogs. */
+.cf-dialog__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.cf-dialog--wide {
+  width: min(760px, 100%);
+}
+
+.cf-choices {
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--rp-separator);
+  border-radius: var(--rp-radius-large);
+  list-style: none;
+}
+
+.cf-choice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+}
+
+.cf-choice + .cf-choice {
+  border-top: 1px solid var(--rp-separator);
+}
+
+.cf-choice__text {
+  min-width: 0;
+}
+
+.cf-choice__name {
+  display: block;
+  font-weight: 600;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1000px) {
+  .cf-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .cf-configs {
+    grid-template-columns: minmax(170px, 210px) minmax(0, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 720px) {
+  /* One column: the process becomes a select above its configurations. */
+  .cf-configs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cf-processes {
+    display: none;
+  }
+
+  .cf-process-select {
+    display: block;
+  }
+
+  .cf-config {
+    flex-direction: column;
+    padding: 14px 16px;
+  }
+
+  /* The actions sit at the left in one column, so the menu opens to the right of its button. */
+  .cf-config__actions .cf-menu__popup {
+    right: auto;
+    left: 0;
+  }
+
+  .cf-policy-facts__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* The table becomes a list of cards. */
+  .cf-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .cf-table,
+  .cf-table tbody,
+  .cf-table tr,
+  .cf-table th,
+  .cf-table td {
+    display: block;
+  }
+
+  .cf-table tr {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rp-separator);
+  }
+
+  .cf-table tbody tr:last-child {
+    border-bottom: 0;
+  }
+
+  .cf-table th,
+  .cf-table td {
+    padding: 2px 0;
+    border: 0;
+  }
+
+  .cf-table td[data-label]::before {
+    content: attr(data-label) ': ';
+    color: var(--rp-text-secondary);
+    font-size: 12px;
+  }
+
+  .cf-table__actions {
+    margin-top: 8px;
+    text-align: left;
+    white-space: normal;
+  }
+
+  .cf-grid-3 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Phones: the tabs share the width and may wrap their words, so none is cut off. */
+@media (max-width: 480px) {
+  .cf-tabs {
+    gap: 0;
+  }
+
+  .cf-tab {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 6px 4px;
+    line-height: 18px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .cf-page {
+    padding: 16px 16px 32px;
+  }
+
+  .cf-card {
+    padding: 16px;
+  }
+
+  .cf-card__header {
+    flex-direction: column;
+  }
+
+  .cf-section__toggle {
+    padding: 10px 16px;
+  }
+
+  .cf-section__panel {
+    padding: 4px 16px 16px;
+  }
+
+  .cf-sample,
+  .cf-grid-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cf-property {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cf-dialog {
+    padding: 20px 16px;
+  }
+}
+
+/* Touch screens: every target at least 44 px. */
+@media (pointer: coarse) {
+  .cf-tab,
+  .cf-button,
+  .cf-button--small,
+  .cf-copy,
+  .cf-chip,
+  .cf-chip--small,
+  .cf-section__toggle {
+    min-height: 44px;
+  }
+
+  .cf-link {
+    min-height: 44px;
+    font-size: 14px;
+  }
+
+  .cf-menu__item {
+    min-height: 44px;
+  }
+
+  .cf-button--icon {
+    width: 44px;
+  }
+
+  .cf-setting--flag,
+  .cf-radio {
+    min-height: 44px;
+  }
+
+  .cf-checkbox {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cf-input,
+  .cf-button,
+  .cf-chip,
+  .cf-section__chevron,
+  .cf-chip__chevron {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .cf-chip[aria-pressed='true'],
+  .cf-segmented__input:checked + .cf-segmented__label {
+    forced-color-adjust: none;
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .cf-unsaved__dot {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+
+  .cf-tab[aria-selected='true']::after {
+    background: Highlight;
+  }
+
+  .cf-segmented__input:disabled + .cf-segmented__label {
+    color: GrayText;
+  }
+
+  .cf-dialog,
+  .cf-menu__popup {
+    border-color: CanvasText;
+  }
+
+  .cf-process[aria-current='true'] {
+    outline: 1px solid Highlight;
+  }
+
+  .cf-process[aria-current='true']::before {
+    forced-color-adjust: none;
+    background: Highlight;
+  }
+
+  /* Link-buttons are buttons, which forced colors draw as plain ButtonText: give them the link
+     color and an underline so they still read as links. The back link has its chevron. */
+  .cf-link {
+    color: LinkText;
+    text-decoration: underline;
+  }
+
+  .cf-back {
+    text-decoration: none;
+  }
+
+  /* Washes disappear in forced colors: a border keeps each callout's boundary. */
+  .cf-callout {
+    border: 1px solid CanvasText;
+  }
+
+  /* Status icons whose color comes from the theme would keep it; they all follow the text here. */
+  .cf-callout > .rp-icon,
+  .cf-permission > .rp-icon,
+  .cf-secret-status > .rp-icon,
+  .cf-plan__note > .rp-icon,
+  .cf-always-on > .rp-icon {
+    color: CanvasText;
+  }
+}

@@ -1,0 +1,146 @@
+name: Bug report
+description: Something in REST Picklist doesn’t work the way the documentation says.
+title: '[Bug]: '
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. The questions below help reproduce it.
+
+        **Never post secrets or personal data.** No passwords, tokens, API keys, client secrets, private keys, certificate files (.pfx, .p12, .pem, .key) or their passwords, access tokens, or real people’s data. Exported configuration files never contain credentials or user names, so they’re safe to share once you’ve checked the rest.
+
+        To report a security vulnerability, don’t open an issue: follow the [security policy](https://github.com/OscarArguedasB/RestDataMappingPicklist/blob/main/SECURITY.md).
+
+  - type: dropdown
+    id: version
+    attributes:
+      label: Extension version
+      description: Shown in Organization settings › Extensions.
+      options:
+        - '4.0.x'
+        - 'Another version (say which under What happened)'
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where it happens
+      options:
+        - 'The control on a work item form'
+        - 'The Configurations tab (Organization settings › Extensions › REST Picklist)'
+        - 'The configuration editor or its test'
+        - 'Credentials, certificates or OAuth 2.0 tokens'
+        - 'Moving controls from the process editor'
+        - 'The Security policy tab'
+        - 'The Marketplace page or the documentation'
+    validations:
+      required: true
+
+  - type: dropdown
+    id: control-setup
+    attributes:
+      label: How the control is set up
+      description: What the control has on its Options tab in the process editor.
+      options:
+        - 'A configuration name'
+        - 'Settings from before 4.0, not moved yet'
+        - 'Nothing yet: it says “API configuration has moved”'
+        - 'Not about a control'
+
+  - type: dropdown
+    id: sign-in
+    attributes:
+      label: Sign-in method
+      options:
+        - 'No sign-in'
+        - 'Basic'
+        - 'Bearer token'
+        - 'API key'
+        - 'OAuth 2.0 with a client secret, sent as Basic Auth header'
+        - 'OAuth 2.0 with a client secret, sent in the body'
+        - 'OAuth 2.0 with a certificate or key'
+        - 'Not sure'
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead. Quote any message exactly as the control or the setup page showed it.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open a Bug in a project that uses the Contoso Agile process.
+        2. Open the Customer list.
+        3. …
+
+  - type: textarea
+    id: configuration
+    attributes:
+      label: Exported configuration
+      description: On the Configurations tab, open the configuration’s More actions menu, choose Export and paste the file here. It never contains credentials or user names. Replace anything else you’d rather not share, like internal host names.
+      render: json
+
+  - type: textarea
+    id: test-result
+    attributes:
+      label: Test result and response shape
+      description: The result line of Test and preview in the configuration editor, and the shape of the API’s response with real values replaced by placeholders.
+
+  - type: textarea
+    id: token-service
+    attributes:
+      label: Token service (OAuth 2.0 only)
+      description: Which product issues the tokens (for example Keycloak or an API gateway), whether the test got a token, and the error code the token service sent. Never paste the client secret, the key or a token.
+
+  - type: dropdown
+    id: permissions
+    attributes:
+      label: Your permissions
+      description: What the setup page lets you do depends on them.
+      options:
+        - 'Project Collection Administrator'
+        - 'Edit process permission on the process'
+        - 'Organization member without Edit process permission'
+
+  - type: dropdown
+    id: organization-address
+    attributes:
+      label: Organization address
+      description: Only its form, not your organization’s name.
+      options:
+        - 'https://dev.azure.com/{organization}'
+        - 'https://{organization}.visualstudio.com'
+
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: Browsers
+      multiple: true
+      options:
+        - 'Microsoft Edge'
+        - 'Google Chrome'
+        - 'Mozilla Firefox'
+        - 'Safari'
+        - 'Another browser'
+
+  - type: textarea
+    id: console
+    attributes:
+      label: Browser console
+      description: Lines that start with [REST picklist] in the browser’s developer tools (F12, Console). Check them for secrets and personal data before pasting.
+      render: text
+
+  - type: checkboxes
+    id: no-secrets
+    attributes:
+      label: Before you submit
+      options:
+        - label: I removed passwords, tokens, API keys, client secrets, private keys and personal data from everything above.
+          required: true

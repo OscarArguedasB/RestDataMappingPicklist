@@ -1,0 +1,774 @@
+/* The configuration editor: name, sharing, credentials and OAuth 2.0. Loaded with configurator.css.
+   Colors come from theme.css tokens. Red text always sits on the card itself: on the red wash it
+   falls below 4.5:1 in the dark theme. */
+
+.cf-editor {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.cf-editor__back {
+  margin: 0;
+}
+
+.cf-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: var(--rp-hit);
+  font-size: 13px;
+}
+
+.cf-back .rp-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.cf-editor__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  overflow-wrap: anywhere;
+}
+
+.cf-editor__title:focus:not(:focus-visible),
+.cf-credentials .cf-card__title:focus:not(:focus-visible),
+.cf-process-chips:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.cf-editor__title:focus-visible,
+.cf-credentials .cf-card__title:focus-visible,
+.cf-process-chips:focus-visible {
+  outline: 2px solid var(--rp-focus);
+  outline-offset: 2px;
+}
+
+/* Headings that take focus when a view opens: the focus ring hugs the words, instead of a
+   full-width box that looks like a text field. */
+.cf-editor__title,
+.cf-process-title,
+.cf-section-title {
+  width: fit-content;
+  max-width: 100%;
+}
+
+.cf-editor__callout,
+.cf-editor__identity {
+  max-width: 680px;
+}
+
+.cf-editor__body {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+}
+
+/* 16 px card titles in the editor, so they lead the 14 px body text. */
+.cf-editor .cf-card__title {
+  font-size: 16px;
+}
+
+/* ---------- Name and sharing ---------- */
+
+/* Former names, each with Forget (or Undo once chosen). */
+.cf-aliases {
+  margin-top: 8px;
+}
+
+.cf-aliases .cf-meta {
+  margin: 0;
+}
+
+.cf-aliases__list {
+  display: grid;
+  gap: 2px;
+  margin: 4px 0 0;
+  padding: 0;
+  font-size: 13px;
+  list-style: none;
+}
+
+.cf-aliases__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  min-height: var(--rp-hit);
+}
+
+.cf-editor__identity .cf-sharing {
+  margin-top: 20px;
+}
+
+.cf-sharing__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.cf-process-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border-radius: var(--rp-radius);
+  list-style: none;
+}
+
+.cf-process-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 28px;
+  padding: 0 12px;
+  border: 1px solid var(--rp-border);
+  border-radius: 999px;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.cf-process-chip__remove {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: var(--rp-hit);
+  height: var(--rp-hit);
+  margin-right: -8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--rp-text-secondary);
+  cursor: pointer;
+}
+
+.cf-process-chip__remove:hover {
+  background: var(--rp-fill-hover);
+  color: var(--rp-text);
+}
+
+.cf-process-chip__remove:focus-visible,
+.cf-add-process__item:focus-visible,
+.cf-disclosure summary:focus-visible {
+  outline: 2px solid var(--rp-focus);
+  outline-offset: 1px;
+}
+
+.cf-add-process {
+  position: relative;
+}
+
+.cf-add-process__list {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 220px;
+  max-width: min(320px, calc(100vw - 32px));
+  max-height: 280px;
+  margin: 0;
+  padding: 4px;
+  overflow-y: auto;
+  /* A floating surface: the 50% border keeps its edge visible in every theme (the separator
+     almost disappears on black in high contrast). */
+  border: 1px solid var(--rp-border);
+  border-radius: var(--rp-radius-large);
+  background: var(--rp-surface-raised);
+  box-shadow: var(--rp-shadow);
+  list-style: none;
+}
+
+.cf-add-process__list[hidden] {
+  display: none;
+}
+
+.cf-add-process__item {
+  display: block;
+  width: 100%;
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: var(--rp-radius);
+  background: transparent;
+  color: var(--rp-text);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.cf-add-process__item:hover {
+  background: var(--rp-fill-hover);
+}
+
+/* ---------- Settings and test ---------- */
+
+.cf-editor__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.cf-editor__form,
+.cf-editor__side {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* Wide screens: the form on the left, the test and its live preview kept in view on the right. */
+@media (min-width: 1100px) {
+  .cf-editor__layout {
+    grid-template-columns: minmax(0, 680px) minmax(320px, 1fr);
+  }
+
+  .cf-editor__side {
+    position: sticky;
+    top: 16px;
+    max-height: calc(100vh - 32px - var(--cf-editor-footer-space, 0px));
+    overflow-y: auto;
+  }
+}
+
+.cf-test__status > .cf-token-line {
+  margin: 0 0 10px;
+}
+
+.cf-empty--spaced {
+  margin-top: 8px;
+}
+
+/* Sign-in methods: joined buttons, or a plain list of radios where five labels wouldn't fit
+   without cutting them short (40em is 560 px at the default text size, and grows with it). */
+.cf-signin-method {
+  container-type: inline-size;
+}
+
+@container (max-width: 40em) {
+  .cf-segmented--adaptive .cf-segmented__options {
+    display: grid;
+    gap: 2px;
+    border: 0;
+  }
+
+  .cf-segmented--adaptive .cf-segmented__option + .cf-segmented__option {
+    border-left: 0;
+  }
+
+  .cf-segmented--adaptive .cf-segmented__option {
+    align-items: center;
+    gap: 10px;
+    min-height: var(--rp-hit);
+    padding: 4px 0;
+  }
+
+  .cf-segmented--adaptive .cf-segmented__input {
+    position: static;
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    opacity: 1;
+    accent-color: var(--rp-accent);
+  }
+
+  .cf-segmented--adaptive .cf-segmented__label,
+  .cf-segmented--adaptive .cf-segmented__option:hover .cf-segmented__label,
+  .cf-segmented--adaptive .cf-segmented__input:checked + .cf-segmented__label {
+    min-height: 0;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    color: inherit;
+  }
+
+  .cf-segmented--adaptive .cf-segmented__input:checked + .cf-segmented__label {
+    font-weight: 600;
+  }
+
+  .cf-segmented--adaptive .cf-segmented__input:focus-visible {
+    outline: 2px solid var(--rp-focus);
+    outline-offset: 2px;
+  }
+
+  .cf-segmented--adaptive .cf-segmented__input:focus-visible + .cf-segmented__label {
+    outline: none;
+  }
+}
+
+/* Settings shown as text: the grant type, and choices people may only view. */
+.cf-facts {
+  margin: 0;
+}
+
+.cf-facts dd {
+  margin: 2px 0 0;
+}
+
+.cf-facts--details {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 13px;
+}
+
+.cf-facts--details .cf-facts__row {
+  display: grid;
+  grid-template-columns: minmax(0, 9.5rem) minmax(0, 1fr);
+  gap: 2px 12px;
+  align-items: baseline;
+}
+
+.cf-facts--details dt {
+  color: var(--rp-text-secondary);
+}
+
+.cf-facts--details dd {
+  margin: 0;
+}
+
+/* At phone width the certificate's details stack, so subjects and thumbprints get the whole line. */
+.cf-credentials {
+  container-type: inline-size;
+}
+
+@container (max-width: 30rem) {
+  .cf-facts--details .cf-facts__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+}
+
+.cf-facts__wrap {
+  overflow-wrap: anywhere;
+}
+
+.cf-facts__copy {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin: 0;
+}
+
+.cf-disclosure {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.cf-disclosure summary {
+  width: fit-content;
+  border-radius: var(--rp-radius);
+  color: var(--rp-accent-text);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cf-disclosure > .cf-facts__copy {
+  margin-top: 6px;
+}
+
+.cf-select--short {
+  max-width: 12rem;
+}
+
+/* A sentence's link is underlined, so it doesn't rely on color. */
+.cf-link--inline {
+  font-size: inherit;
+  text-decoration: underline;
+}
+
+/* ---------- OAuth 2.0 ---------- */
+
+/* The notice: --rp-danger text on the card (5.22:1 light, 4.87:1 dark, 7.34:1 high contrast),
+   a warning icon, and a semibold first sentence that carries the meaning in forced colors too. */
+.cf-oauth-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 16px;
+  color: var(--rp-danger);
+  line-height: 20px;
+}
+
+.cf-oauth-notice > .rp-icon {
+  margin-top: 2px;
+}
+
+.cf-oauth-notice__text {
+  min-width: 0;
+  max-width: 70ch;
+}
+
+.cf-oauth-notice p {
+  margin: 0;
+}
+
+.cf-oauth-notice p + p {
+  margin-top: 6px;
+}
+
+.cf-oauth-notice__lead {
+  font-weight: 600;
+}
+
+.cf-oauth {
+  margin-top: 20px;
+}
+
+.cf-oauth__advanced {
+  margin-top: 20px;
+}
+
+.cf-oauth__advanced .cf-section__toggle {
+  min-height: 48px;
+  padding: 8px 16px;
+}
+
+.cf-oauth__advanced .cf-section__panel {
+  padding: 4px 16px 16px;
+}
+
+.cf-oauth__advanced .cf-section__panel > .cf-setting:first-child {
+  margin-top: 4px;
+}
+
+.cf-params {
+  margin-top: 20px;
+}
+
+.cf-params__rows {
+  display: grid;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.cf-params__header,
+.cf-params__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.cf-params__header {
+  color: var(--rp-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cf-params__row > .cf-issue {
+  grid-column: 1 / -1;
+  margin-top: 0;
+}
+
+.cf-params__add {
+  margin-top: 8px;
+}
+
+/* ---------- Credentials ---------- */
+
+.cf-secret-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+}
+
+.cf-secret-status > .rp-icon {
+  margin-top: 2px;
+}
+
+.cf-secret-status--set > .rp-icon {
+  color: var(--rp-success-icon);
+}
+
+.cf-secret-status--unset {
+  color: var(--rp-text-secondary);
+}
+
+.cf-secret-status--warning > .rp-icon {
+  color: var(--rp-warning);
+}
+
+.cf-secret-status .cf-link {
+  font-size: inherit;
+}
+
+.cf-credentials .cf-meta {
+  margin-top: 4px;
+}
+
+.cf-secret-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 16px 0 0;
+}
+
+.cf-secret-input {
+  margin-top: 16px;
+}
+
+.cf-secret-input > * + * {
+  margin-top: 12px;
+}
+
+/* Warnings keep body text, with the colored icon, so they read in every theme. */
+.cf-secret-warnings {
+  display: grid;
+  gap: 4px;
+  margin: 10px 0 0;
+  padding: 0;
+  font-size: 13px;
+  list-style: none;
+}
+
+.cf-secret-warnings li {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.cf-secret-warnings .rp-icon {
+  width: 14px;
+  height: 14px;
+  margin-top: 3px;
+  color: var(--rp-warning);
+}
+
+.cf-key-picker {
+  display: grid;
+  gap: 8px;
+}
+
+.cf-dropzone {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  padding: 16px;
+  border: 1px dashed var(--rp-border);
+  border-radius: var(--rp-radius-large);
+}
+
+.cf-dropzone[data-dragging] {
+  border-color: var(--rp-accent);
+  background: var(--rp-accent-wash);
+}
+
+.cf-dropzone[data-issue='error'] {
+  border-color: var(--rp-danger);
+}
+
+.cf-dropzone .cf-hint {
+  margin: 0;
+}
+
+.cf-key-picker__input {
+  display: none;
+}
+
+.cf-key-picker__files {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cf-key-picker__files li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+
+.cf-key-picker__file {
+  min-width: 0;
+  font-family: var(--rp-font-mono);
+  font-size: 12.5px;
+  overflow-wrap: anywhere;
+}
+
+.cf-key-picker__switch {
+  margin: 0;
+}
+
+.cf-key-picker__password > .cf-button {
+  margin-top: 8px;
+}
+
+.cf-key-picker__status:empty {
+  display: none;
+}
+
+/* ---------- Use it on a form ---------- */
+
+.cf-use-text {
+  margin: 0;
+}
+
+.cf-use-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin: 10px 0;
+}
+
+.cf-use-name .cf-code {
+  padding: 3px 8px;
+  font-size: 13px;
+}
+
+/* ---------- Footer ---------- */
+
+/* Save and Cancel stay pinned to the bottom while the settings scroll under them; in the flow
+   (sticky, not fixed), so at the end of the page it sits below the last card, never over it. */
+.cf-editor__footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: grid;
+  gap: 8px;
+  padding: 12px 0;
+  border-top: 1px solid var(--rp-separator);
+  background-color: var(--rp-surface);
+  box-shadow: 0 -6px 12px -6px var(--callout-shadow-color, rgba(0, 0, 0, 0.132));
+}
+
+.cf-editor__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+
+.cf-editor__status {
+  min-width: 0;
+  margin: 0;
+  color: var(--rp-text-secondary);
+  font-size: 13px;
+}
+
+.cf-editor__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.cf-editor__message {
+  max-width: 680px;
+}
+
+.cf-editor__message-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cf-callout .cf-editor__message-actions {
+  margin-top: 8px;
+}
+
+/* Save can't save yet, but stays focusable: pressing it shows the first problem. Buttons that
+   wait while something runs (in dialogs) stay focusable the same way, so focus never drops to
+   the page behind. */
+.cf-button[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Waiting buttons keep their look, only dimmed, and don't react to the pointer. */
+.cf-button--busy[aria-disabled='true']:hover {
+  background: transparent;
+}
+
+.cf-button--primary.cf-button--busy[aria-disabled='true']:hover {
+  background: var(--rp-accent);
+}
+
+.cf-button--danger-fill.cf-button--busy[aria-disabled='true']:hover {
+  background: var(--rp-danger);
+}
+
+/* It's still a working button that people need to read, so it isn't dimmed: it's outlined at full
+   contrast instead, and the footer says what's in the way (“fix 2 problems to save”). */
+.cf-button--primary[aria-disabled='true']:not(.cf-button--busy),
+.cf-button--primary[aria-disabled='true']:not(.cf-button--busy):hover {
+  opacity: 1;
+  border-color: var(--rp-border);
+  background: transparent;
+  color: var(--rp-text);
+}
+
+/* The page's bottom scroll padding follows whichever pinned bar is shown (see PolicyTab). */
+html {
+  scroll-padding-bottom: max(var(--cf-actionbar-space, 0px), var(--cf-editor-footer-space, 0px));
+}
+
+/* ---------- Touch, forced colors ---------- */
+
+@media (pointer: coarse) {
+  .cf-back,
+  .cf-process-chip,
+  .cf-add-process__item {
+    min-height: 44px;
+  }
+
+  .cf-process-chip__remove {
+    width: 36px;
+    height: 36px;
+  }
+
+  .cf-disclosure summary {
+    padding: 12px 0;
+  }
+}
+
+@media (forced-colors: active) {
+  .cf-process-chip,
+  .cf-dropzone,
+  .cf-add-process__list {
+    border-color: CanvasText;
+  }
+
+  .cf-dropzone[data-dragging] {
+    border-color: Highlight;
+  }
+
+  .cf-button[aria-disabled='true'] {
+    border-color: GrayText;
+    color: GrayText;
+  }
+
+  /* Icons colored by the theme would keep those colors; like the words, they follow the text. */
+  .cf-secret-status--set > .rp-icon,
+  .cf-secret-status--warning > .rp-icon,
+  .cf-secret-warnings .rp-icon {
+    color: CanvasText;
+  }
+}
+
+/* As a list, the radio itself shows the choice, so the label keeps the normal text colors. */
+@container (max-width: 40em) {
+  @media (forced-colors: active) {
+    .cf-segmented--adaptive .cf-segmented__input:checked + .cf-segmented__label {
+      forced-color-adjust: auto;
+      background: none;
+      color: CanvasText;
+    }
+  }
+}

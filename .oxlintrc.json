@@ -1,0 +1,33 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "jsx-a11y", "unicorn", "oxc", "vitest"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "env": {
+    "browser": true,
+    "es2024": true
+  },
+  "ignorePatterns": ["dist/**", "node_modules/**", ".vs/**"],
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "warn",
+    "react/jsx-key": "error",
+    "react/no-danger": "error",
+    "react/jsx-no-target-blank": "error",
+    "react/react-in-jsx-scope": "off",
+    "typescript/consistent-type-imports": "error",
+    "typescript/no-floating-promises": "error",
+    "typescript/await-thenable": "error",
+    "no-console": ["warn", { "allow": ["info", "warn", "error"] }],
+    "no-underscore-dangle": ["warn", { "allow": ["__etag"] }],
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
+  },
+  "overrides": [
+    {
+      "files": ["*.js", "*.mjs", "scripts/**"],
+      "env": { "node": true, "browser": false }
+    }
+  ]
+}

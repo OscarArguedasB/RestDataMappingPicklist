@@ -1,0 +1,9 @@
+# Dependabot checks the npm packages once a month and opens a pull request for each update.
+# When React, React DOM, scheduler or the Azure DevOps extension SDK change version, update
+# THIRD-PARTY-NOTICES.md too: they ship inside the extension.
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'monthly'

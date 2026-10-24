@@ -1,0 +1,35 @@
+name: 'CodeQL'
+
+# Looks for security problems in the TypeScript source: on every change to main, on pull requests
+# into main, and once a week, so newly published queries also run on code that hasn't changed.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '16 9 * * 0'
+
+jobs:
+  analyze:
+    name: Analyze TypeScript
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v7
+
+      # CodeQL reads JavaScript and TypeScript straight from the source, so nothing is built.
+      - name: Start CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: javascript-typescript
+          build-mode: none
+          config-file: ./.github/codeql/codeql-config.yml
+
+      - name: Analyze and upload the results
+        uses: github/codeql-action/analyze@v4
