@@ -16,7 +16,7 @@ function childPath(parent: string, key: string): string {
     ? parent
       ? `${parent}.${key}`
       : key
-    : `${parent}["${key.replace(/"/g, '\\"')}"]`;
+    : `${parent}["${key.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"]`;
 }
 
 /** Lists arrays in a response so an administrator can pick the one holding the rows. */
