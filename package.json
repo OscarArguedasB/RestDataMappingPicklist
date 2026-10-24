@@ -57,7 +57,7 @@
     "mini-css-extract-plugin": "^2.10.2",
     "oxlint": "^1.86.0",
     "oxlint-tsgolint": "^7.0.2003",
-    "prettier": "^3.9.9",
+    "prettier": "^3.9.10",
     "tfx-cli": "^0.24.2",
     "typescript": "^7.0.2",
     "vitest": "^5.0.2",
