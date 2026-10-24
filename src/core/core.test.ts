@@ -32,6 +32,27 @@ describe('getByPath', () => {
   it('parses quoted bracket segments', () => {
     expect(parsePath('a["b.c"][2]')).toEqual(['a', 'b.c', '2']);
   });
+
+  it('reads escaped quotes and backslashes in quoted segments', () => {
+    expect(parsePath(String.raw`a["say \"hi\""]`)).toEqual(['a', 'say "hi"']);
+    expect(parsePath(String.raw`a['it\'s']`)).toEqual(['a', "it's"]);
+    expect(parsePath(String.raw`a["C:\\data"]`)).toEqual(['a', String.raw`C:\data`]);
+    // Other backslashes stay as written, so paths typed before escapes were read keep working.
+    expect(parsePath(String.raw`a["C:\data"]`)).toEqual(['a', String.raw`C:\data`]);
+  });
+
+  it('finds keys with quotes and backslashes through the paths the setup page suggests', () => {
+    const key = String.raw`odd "key" \ here`;
+    const response = { wrapper: { [key]: [{ [key]: 'Contoso' }] } };
+    const [list] = findArrays(response);
+    expect(list?.path).toBe(String.raw`wrapper["odd \"key\" \\ here"]`);
+    const rows = getByPath(response, list?.path ?? '');
+    expect(rows).toEqual([{ [key]: 'Contoso' }]);
+    const row: unknown = Array.isArray(rows) ? rows[0] : undefined;
+    const [property] = listProperties(row);
+    expect(property?.path).toBe(String.raw`["odd \"key\" \\ here"]`);
+    expect(getByPath(row, property?.path ?? '')).toBe('Contoso');
+  });
 });
 
 describe('field tokens', () => {
